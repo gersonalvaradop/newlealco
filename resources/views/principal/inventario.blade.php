@@ -48,6 +48,9 @@
                             <td><label for="">Tipo: </label></td>
                             <td>
                                 <el-select v-model="registro.tipo_operacion" size="mini" placeholder="Seleccione E/S" filterable>
+                                    <el-option key="es0" value="">
+                                        Seleccione una opción
+                                    </el-option>
                                     <el-option key="es1" value="entrada">
                                         Entrada
                                     </el-option>
@@ -89,6 +92,9 @@
         <div class="col">
             Producto:
             <el-select v-model="registro.material_id" width="100" placeholder="Select" filterable>
+                <el-option key="pr0" value="">
+                                        Seleccione una opción
+                                    </el-option>
                 <el-option v-for="(d,k) in material.filter(r=>(r.lleva_inventario=='1' && r.activo=='1'))" :key="d.id" :label="`${d.sku} - ${d.descripcion}`" :value="d.id">
                     {{d.sku}} - {{d.descripcion}}
                 </el-option>
@@ -119,7 +125,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(d,k) in info">
+                <tr v-for="(d,k) in infoFiltered" :key="k">
                     <td><span>{{ dateFormater(d.fecha, 'DD/MM/YYYY')}} </span></td>
                     <td><span>{{getMaterial(d.material_id)?.sku}} </span></td>
                     <td><span>{{(getMaterial(d.material_id)?.descripcion_corta=='' || getMaterial(d.material_id)?.descripcion_corta==null)?getMaterial(d.material_id)?.descripcion:getMaterial(d.material_id)?.descripcion_corta}} </span></td>
@@ -367,7 +373,17 @@
         },
         computed: {
             infoFiltered() {
-                return this.info;
+                let material_inventariado = this.material.filter(r=>r.lleva_inventario=='1').map(t=>t.id)
+                let filtered = this.info.filter(d => material_inventariado.includes(d.material_id));
+
+                if (this.registro.tipo_operacion !== "") {
+                    filtered = filtered.filter(d => d.tipo_operacion === this.registro.tipo_operacion);
+                }
+                if (this.registro.material_id !== "") {
+                    filtered = filtered.filter(d => d.material_id == this.registro.material_id);
+                }
+
+                return filtered;
             }
         },
         mounted() {
