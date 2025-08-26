@@ -70,6 +70,31 @@
                 <div class="col">
                     <table>
                         <tr>
+                            <td><label for="">Inventario: </label></td>
+                            <td>
+                                <el-select v-model="filtroInventario" size="mini" placeholder="Filtro de inventario" filterable>
+                                    <el-option key="inv0" value="">
+                                        Todos los productos
+                                    </el-option>
+                                    <el-option key="inv1" value="solo_inventariados">
+                                        Solo inventariados
+                                    </el-option>
+                                    <el-option key="inv2" value="no_inventariados">
+                                        No inventariados
+                                    </el-option>
+                                </el-select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <table>
+                        <tr>
                             <td>Fecha:</td>
                             <td><el-date-picker @change="getData()" format="dd/MM/yyyy" size="mini" type="date" v-model="registro.fecha" placeholder="Seleccione una fecha">
                                 </el-date-picker></td>
@@ -185,6 +210,7 @@
             loading: true,
             info: [],
             material: <?= $materiales ?>,
+            filtroInventario: 'solo_inventariados', // Nuevo campo para el filtro de inventario
         },
         methods: {
             getMaterial(d) {
@@ -373,8 +399,17 @@
         },
         computed: {
             infoFiltered() {
-                let material_inventariado = this.material.filter(r=>r.lleva_inventario=='1').map(t=>t.id)
-                let filtered = this.info.filter(d => material_inventariado.includes(d.material_id));
+                let filtered = this.info;
+
+                // Aplicar filtro de inventario según la opción seleccionada
+                if (this.filtroInventario === "solo_inventariados") {
+                    let material_inventariado = this.material.filter(r=>r.lleva_inventario=='1').map(t=>t.id)
+                    filtered = filtered.filter(d => material_inventariado.includes(d.material_id));
+                } else if (this.filtroInventario === "no_inventariados") {
+                    let material_no_inventariado = this.material.filter(r=>r.lleva_inventario!='1').map(t=>t.id)
+                    filtered = filtered.filter(d => material_no_inventariado.includes(d.material_id));
+                }
+                // Si filtroInventario está vacío, muestra todos los productos (no se aplica filtro)
 
                 if (this.registro.tipo_operacion !== "") {
                     filtered = filtered.filter(d => d.tipo_operacion === this.registro.tipo_operacion);
