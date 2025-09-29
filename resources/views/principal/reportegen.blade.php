@@ -260,7 +260,36 @@
                                     <td></td>
                                     <td>{{numberFormat( detalle.reduce((acumulador, { precio, cantidad }) => acumulador + ((precio ?? 0) * (cantidad ?? 0)), 0) )}}</td>
                                 </tr>
-                                
+                                <tr>
+                                    <td colspan="5">
+                                        <div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px;">
+                                            <div>
+                                                <strong>Estado Ticket:</strong>
+                                                <span>{{ facturaActual.estado_ticket ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Bodega Entrega:</strong>
+                                                <span>{{ facturaActual.bodega_entrega ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Turno:</strong>
+                                                <span>{{ facturaActual.turno ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Motivo:</strong>
+                                                <span>{{ facturaActual.motivo ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Comentario:</strong>
+                                                <span>{{ facturaActual.comentario ?? '-' }}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Ticket:</strong>
+                                                <span>{{ facturaActual.ticket ?? '-' }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
 
 
                             </table>
@@ -296,11 +325,12 @@
             detalleDocumento: "",
             searchDebounced: false,
             searchTimeout: null,
+            facturaActual: {},
             
         },
         methods: {
             openDetails(detalles){
-                
+                this.facturaActual = this.jclear(detalles);
                 this.loading = true;
                 axios.post('<?= route('getRepoGeneralDetalle') ?>', {
                         documento: detalles.documento,
