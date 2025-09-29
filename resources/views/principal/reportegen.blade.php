@@ -16,7 +16,7 @@
 </style>
 <div id="app" v-loading.fullscreen.lock="loading" :element-loading-text="textoCarga" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
     <h4 class="display-4" style="font-size: 30px;">Reporte General</h4>
-    <button class="btn btn-success btn-sm btn-block my-2" @click="exportData(info,'ReporteGeneral')" v-if="info.length>0"><i class="fa fa-file-excel-o"></i> Excel</button>
+    <button class="btn btn-success btn-sm btn-block my-2" @click="exportData(filteredInfo,'ReporteGeneral')" v-if="info.length>0"><i class="fa fa-file-excel-o"></i> Excel</button>
 
     <div class="row">
         <div class="col">
