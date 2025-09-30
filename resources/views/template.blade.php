@@ -122,11 +122,11 @@
                             <span>Reporte Pareto</span></a>
 
 
-                        <a class="collapse-item <?= (auth()->user()->name!='LEALCO')?'d-none':''?>" href="<?= route('reporteSubsidio') ?>">
+                        <a class="collapse-item <?= (auth()->user()->name!='LEALCO')?'':''?>" href="<?= route('reporteSubsidio') ?>">
                             <span>Reporte de subsidios<br> y excedentes</span></a>
 
 
-                        <a class="collapse-item <?= (auth()->user()->name!='LEALCO')?'d-none':''?>" href="<?= route('reporteSubsidioDetalle') ?>">
+                        <a class="collapse-item <?= (auth()->user()->name!='LEALCO')?'':''?>" href="<?= route('reporteSubsidioDetalle') ?>">
                             <span>Reporte de subsidios<br> y excedentes Detallado</span></a>
 
                         <a class="collapse-item" href="<?= route('reporteKardex') ?>">
