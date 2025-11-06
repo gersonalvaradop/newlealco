@@ -31,7 +31,7 @@
             </el-select>
 
         </div>
-        <div class="col-sm">
+        <div class="col-sm d-none">
             <label for="subclase">Sucursal</label>
             <el-select v-model="sucursalSeleccionada" @change="aplicarFiltro(busqueda)" clearable placeholder="Seleccione una empresa">
                 <el-option key="A1" label="Todas las empresas" value="">
@@ -41,6 +41,18 @@
             </el-select>
         </div>
 
+    </div>
+
+    <div class="row my-1">
+        <div class="col-sm">
+            <label for="bodega">Bodega</label>
+            <el-select v-model="bodegaSeleccionada" @change="aplicarFiltro(busqueda)" clearable placeholder="Seleccione una bodega" style="width: 100%;" size="small" filterable>
+                <el-option key="B1" label="Todas las bodegas" value="">
+                </el-option>
+                <el-option v-for="item in bodegas" :key="`b${item}`" :label="item" :value="item">
+                </el-option>
+            </el-select>
+        </div>
     </div>
 
     <div class="row my-1">
@@ -127,6 +139,7 @@
             searchTimeout: null,
             sucursalSeleccionada: '',
             sucursales: <?= $sucursales ?>,
+            bodegaSeleccionada: '',
         },
         methods: {
             setSubclase() {
@@ -248,6 +261,11 @@
                             return i.sucursal == this.sucursalSeleccionada
                         });
                     }
+                    if (this.bodegaSeleccionada != '') {
+                        this.filteredInfo = this.filteredInfo.filter((i) => {
+                            return i.consumo == this.bodegaSeleccionada
+                        });
+                    }
                     
 
 
@@ -274,6 +292,15 @@
 
         },
         computed: {
+            bodegas() {
+                if (this.info.length > 0) {
+                    // Extraer todos los valores únicos del campo consumo
+                    let consumosUnicos = [...new Set(this.info.map(item => item.consumo))];
+                    // Filtrar valores vacíos o null y ordenar alfabéticamente
+                    return consumosUnicos.filter(consumo => consumo && consumo.trim() !== '').sort();
+                }
+                return [];
+            },
             infoFiltered() {
                 data = this.jclear(this.info)
                 if (this.info.length > 0) {
@@ -290,6 +317,11 @@
                     if (this.sucursalSeleccionada != '') {
                         data = data.filter((i) => {
                             return parseInt(i.sucursal) == this.sucursalSeleccionada
+                        });
+                    }
+                    if (this.bodegaSeleccionada != '') {
+                        data = data.filter((i) => {
+                            return i.consumo == this.bodegaSeleccionada
                         });
                     }
                 }
