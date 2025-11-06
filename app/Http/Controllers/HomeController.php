@@ -234,11 +234,11 @@ class HomeController extends Controller
     function getReportePareto(Request $request)
     {
         $data = $request->all();
-        echo json_encode(DB::select(DB::raw("SELECT material_id, f.sucursal, m.clase, m.subclase, r.sku,  m.descripcion,  round(SUM((r.cantidad*r.precio)+r.impuesto),2) total, SUM(r.cantidad) cantidad FROM rpt_facturas_det r 
+        echo json_encode(DB::select(DB::raw("SELECT material_id, f.destino, f.sucursal, m.clase, m.subclase, r.sku,  m.descripcion,  round(SUM((r.cantidad*r.precio)+r.impuesto),2) total, SUM(r.cantidad) cantidad FROM rpt_facturas_det r 
         LEFT JOIN materiales m on r.material_id = m.id
         INNER JOIN  rpt_facturas f on r.id=f.id
           WHERE coalesce(f.estatus,'-')<>'X' and f.fecha_docum BETWEEN '" . $data['fechas_ini'] . "' AND '" . $data['fechas_fin'] . "' 
-          GROUP BY f.sucursal, r.sku,m.clase,m.subclase,m.descripcion, material_id ORDER BY SUM((r.cantidad*r.precio)+r.impuesto) desc")));
+          GROUP BY f.sucursal,f.destino, r.sku,m.clase,m.subclase,m.descripcion, material_id ORDER BY SUM((r.cantidad*r.precio)+r.impuesto) desc")));
 
         //"SELECT material_id, clase, subclase, r.sku,  m.descripcion,  round(SUM((cantidad*precio)+impuesto),2) total, SUM(cantidad) cantidad FROM rpt_facturas_det r INNER JOIN materiales m on r.material_id = m.id  WHERE fecha_docum BETWEEN '" . $data['fechas_ini'] . "' AND '" . $data['fechas_fin'] . "' GROUP BY material_id, r.sku,clase,subclase,descripcion ORDER BY SUM((cantidad*precio)+impuesto) desc"      
         //SELECT material_id,  m.descripcion, SUM(total) total, SUM(cantidad) cantidad FROM rpt_facturas_det r INNER JOIN materiales m on r.material_id = m.id  WHERE fecha_docum BETWEEN '2024-03-01' AND '2024-03-04' GROUP BY material_id ORDER BY SUM(total) desc
